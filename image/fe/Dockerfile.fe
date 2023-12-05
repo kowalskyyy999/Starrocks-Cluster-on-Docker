@@ -6,6 +6,12 @@ ARG USER_GID=1000
 
 WORKDIR /opt/starrocks
 
+RUN apt-get install ca-certificates -y && \
+    mkdir /etc/pki && \
+    mkdir /etc/pki/tls && \
+    mkdir /etc/pki/tls/certs && \
+    cp /etc/ssl/certs/ca-certificates.crt /etc/pki/tls/certs/ca-bundle.crt
+
 RUN mkdir fe/meta  &&\
     echo bash /opt/starrocks/fe/bin/stop_fe.sh --daemon > "start_server_fe.sh" && \
     echo bash /opt/starrocks/fe/bin/start_fe.sh --daemon >> "start_server_fe.sh" && \
@@ -13,7 +19,7 @@ RUN mkdir fe/meta  &&\
     echo tail -f /opt/starrocks/fe/log/fe.log >> "start_server_fe.sh" && \
     chmod a+x start_server_fe.sh 
 
-RUN chown -R ${USER_UID}:${USER_UID}:${USER_GID} /opt/starrocks
+RUN chown -R ${USER_UID}:${USER_GID} /opt/starrocks
 
 WORKDIR /opt
 

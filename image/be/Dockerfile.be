@@ -8,6 +8,12 @@ ENV TZ="Asia/Jakarta"
 
 WORKDIR /opt/starrocks
 
+RUN apt-get install ca-certificates -y && \
+    mkdir /etc/pki && \
+    mkdir /etc/pki/tls && \
+    mkdir /etc/pki/tls/certs && \
+    cp /etc/ssl/certs/ca-certificates.crt /etc/pki/tls/certs/ca-bundle.crt
+
 RUN mkdir be/storage && \
     echo bash /opt/starrocks/be/bin/stop_be.sh --daemon > "start_be_server.sh" && \
     echo bash /opt/starrocks/be/bin/start_be.sh --daemon >> "start_be_server.sh" && \
