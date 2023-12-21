@@ -1,4 +1,4 @@
-FROM starrocks-base:2.5.16
+FROM starrocks-base:3.1.6
 
 ARG USER=starrocks
 ARG USER_UID=1000

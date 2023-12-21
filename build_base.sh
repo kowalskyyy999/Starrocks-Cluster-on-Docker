@@ -3,5 +3,5 @@
 set -e
 
 docker build \
-    -t starrocks-base:2.5.16 \
+    -t starrocks-base:3.1.6 \
     -f ./image/base/Dockerfile .

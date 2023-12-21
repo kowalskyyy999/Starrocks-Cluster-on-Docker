@@ -21,11 +21,11 @@ RUN groupadd --gid ${USER_UID} ${USER} && \
     useradd --uid ${USER_UID} --gid $USER_GID -M --shell /usr/sbin/nologin ${USER} && \
     usermod -aG root ${USER}
 
-COPY ./image/base/StarRocks-2.5.16.tar.gz .
+COPY ./image/base/StarRocks-3.1.6.tar.gz .
 
-RUN tar -zxvf StarRocks-2.5.16.tar.gz && \
-    mv StarRocks-2.5.16 starrocks && \
-    rm StarRocks-2.5.16.tar.gz 
+RUN tar -zxvf StarRocks-3.1.6.tar.gz && \
+    mv StarRocks-3.1.6 starrocks && \
+    rm StarRocks-3.1.6.tar.gz 
 
 COPY ./image/base/conf/fe.conf /opt/starrocks/fe/conf
 COPY ./image/base/conf/be.conf /opt/starrocks/be/conf
