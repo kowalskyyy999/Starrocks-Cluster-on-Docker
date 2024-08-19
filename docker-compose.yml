@@ -6,36 +6,88 @@ networks:
     external: true
 
 services:
-  fe-server:
-    image: starrocks-fe 
-    container_name: fe-server
-    build:
-      context: ./image/fe
-      dockerfile: Dockerfile.fe
-    volumes:
-      - starrocks-fe:/opt/starrocks/fe
-    ports:
-      - 8030:8030
-      - 9030:9030
-    networks:
-      - starrocks-net
-  
   be-server:
-    image: starrocks-be
-    container_name: be-server
+    image: starrocks:${STARROCKS_VERSION} 
+    container_name: be-server 
     build:
-      context: ./image/be
-      dockerfile: Dockerfile.be
-    volumes:
-      - starrocks-be:/opt/starrocks/be
+      context: ./image/base
+      args:
+        STARROCKS_VERSION: ${STARROCKS_VERSION}
+        PRIORITY_NETWORKS: ${PRIORITY_NETWORKS}
+      dockerfile: Dockerfile
+    command: ["/bin/sh", "-c", "/opt/starrocks/be_server.sh"]
     ports:
       - 8040:8040
-      - 9060:9060
+    volumes:
+      - starrocks-be:/opt/starrocks/be
     networks:
       - starrocks-net
-    depends_on:
-      - fe-server
 
+  cn-server:
+    image: starrocks:${STARROCKS_VERSION} 
+    container_name: cn-server 
+    build:
+      context: ./image/base
+      args:
+        STARROCKS_VERSION: ${STARROCKS_VERSION}
+        PRIORITY_NETWORKS: ${PRIORITY_NETWORKS}
+      dockerfile: Dockerfile
+    command: ["/bin/sh", "-c", "/opt/starrocks/cn_server.sh"]
+    networks:
+      - starrocks-net
+
+  fe-server:
+    image: starrocks:${STARROCKS_VERSION}
+    container_name: fe-server 
+    build:
+      context: ./image/base
+      args:
+        STARROCKS_VERSION: ${STARROCKS_VERSION}
+        PRIORITY_NETWORKS: ${PRIORITY_NETWORKS}
+      dockerfile: Dockerfile
+    command: ["/bin/sh", "-c", "/opt/starrocks/fe_server.sh"]
+    ports:
+      - 9030:9030
+      - 8030:8030
+    volumes:
+      - starrocks-fe:/opt/starrocks/fe
+    environment:
+      - ROOT_STARROCKS_PASSWORD=Password123456
+      - STARROCKS_USERNAME=kowlsss
+      - STARROCKS_PASSWORD=Password123456
+      - STARROCKS_DATABASE=test_db
+    networks:
+      - starrocks-net
+  # fe-server:
+  #   image: starrocks-fe 
+  #   container_name: fe-server
+  #   build:
+  #     context: ./image/fe
+  #     dockerfile: Dockerfile.fe
+  #   volumes:
+  #     - starrocks-fe:/opt/starrocks/fe
+  #   ports:
+  #     - 8030:8030
+  #     - 9030:9030
+  #   networks:
+  #     - starrocks-net
+#   
+#   be-server:
+#     image: starrocks-be
+#     container_name: be-server
+#     build:
+#       context: ./image/be
+#       dockerfile: Dockerfile.be
+#     volumes:
+#       - starrocks-be:/opt/starrocks/be
+#     ports:
+#       - 8040:8040
+#       - 9060:9060
+#     networks:
+#       - starrocks-net
+#     depends_on:
+#       - fe-server
+#
 volumes:
   starrocks-fe:
     external: true
