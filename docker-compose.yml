@@ -52,10 +52,10 @@ services:
     volumes:
       - starrocks-fe:/opt/starrocks/fe
     environment:
-      - ROOT_STARROCKS_PASSWORD=Password123456
-      - STARROCKS_USERNAME=kowlsss
-      - STARROCKS_PASSWORD=Password123456
-      - STARROCKS_DATABASE=test_db
+      - ROOT_STARROCKS_PASSWORD=${ROOT_STARROCKS_PASSWORD}
+      - STARROCKS_USERNAME=${STARROCKS_USERNAME}
+      - STARROCKS_PASSWORD=${STARROCKS_PASSWORD}
+      - STARROCKS_DATABASE=${STARROCKS_DATABASE}
     networks:
       - starrocks-net
 #
